@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Property Details: </h1>
+
+<form action='/listownerproperties'>
+  <input type="submit" value="Go Back to Listings">
+</form>
+<br> <br>
+<form action='/logout'>
+  <input type="submit" value="Logout">
+</form>
+<br> <br>
+
+<form name="detailsform" id="detailsform" action="/getpropertydesc/<int:pk>">
+    <img src="C:\Users\varsh\Downloads\SC2006_HouseItApp\PropertyImage.jpg"  style="width:300px;height:300px;">
+    <form action='/editproperty'>
+        <input class="EditButton"  id="EditBtn" name="EditBtn" style="margin: 25px 0px;" type="submit" value="Edit" />
+    </form>
+    <form action='/deleteproperty'>
+    <input type="submit" name="Delete" style="margin: 25px 0px;" value="Delete" class="DeleteButton">
+    </form>
+    <input type="submit" value="Edit Listing">
+     <input type="submit" value="View Property Listings">
+    <label class="radio-inline">
+        {% if urirentsale != 'sale' %}
+            <input type="radio" name="rentsale" value="rental" checked >Rental</input>
+        {% else %}
+            <input type="radio" name="rentsale" value="rental" >Rental</input>
+        {% endif %}
+    </label>
+    <label class="radio-inline">
+        {% if urirentsale == 'sale' %}
+            <input type="radio" name="rentsale" value="sale" checked >Sale</input>
+        {% else %}
+            <input type="radio" name="rentsale" value="sale">Sale</input>
+        {% endif %}
+    </label>
+<br> <br>
+
+
+
+    <input type="submit" value="View">
+
+
+</form>
+<!--Check if urirentsale (uri parm) is default '-'. If so there then we are initial page of search, and so we don't need to render any properties till user clicks search-->
+
+{% if urirentsale != '-' %}
+    {% if properties %}
+    <!-- Check if we are in "Rental" or "Sale" based search rendering and render corresponding table -->
+        {% if urirentsale == 'rental' %}
+            <div class="container-fluid p-2 bg-primary text-white text-center">
+                <h1>Your properties </h1>
+            </div>
+            <div class="container mt-5">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Town</th>
+                            <th>Street</th>
+                            <th>Block</th>
+                            <th>Flat Type</th>
+                            <th>Age</th>
+                            <th>Monthly Rent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for property in properties %}
+                        <tr>
+                            <td><a href="/getpropertydesc/<int:pk>">{{ property.0 }}</a></td>
+                            <td>{{ property.1 }}</td>
+                            <td>{{ property.2}}</td>
+                            <td>{{ property.3 }}</td>
+                            <td>{{ property.4 }}</td>
+                            <td>{{ property.5 }}</td>
+                            <td>{{ property.6 }}</td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+           </div>
+        {% endif %}
+<!--        {% if urirentsale == 'sale' %}-->
+<!--            <div class="container-fluid p-2 bg-primary text-white text-center">-->
+<!--                <h1>Matching properties </h1>-->
+<!--            </div>-->
+<!--            <div class="container mt-5">-->
+<!--                <table class="table">-->
+<!--                    <thead>-->
+<!--                        <tr>-->
+<!--                            <th>Id</th>-->
+<!--                            <th>YYYYMM</th>-->
+<!--                            <th>Town</th>-->
+<!--                            <th>Flat Type</th>-->
+<!--                            <th>Block</th>-->
+<!--                            <th>Street</th>-->
+<!--                            <th>Floor Area</th>-->
+<!--                            <th>Flat Model </th>-->
+<!--                            <th>Lease Commencement </th>-->
+<!--                            <th>Remaining Lease</th>-->
+<!--                            <th>Resale Price</th>-->
+<!--                        </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                        {% for property in properties %}-->
+<!--                        <tr>-->
+<!--                            <td>{{ property.0 }}</td>-->
+<!--                            <td>{{ property.1 }}</td>-->
+<!--                            <td>{{ property.2}}</td>-->
+<!--                            <td>{{ property.3 }}</td>-->
+<!--                            <td>{{ property.4 }}</td>-->
+<!--                            <td>{{ property.5 }}</td>-->
+<!--                            <td>{{ property.6 }}</td>-->
+<!--                            <td>{{ property.7 }}</td>-->
+<!--                            <td>{{ property.8 }}</td>-->
+<!--                            <td>{{ property.9 }}</td>-->
+<!--                            <td>{{ property.10 }}</td>-->
+
+<!--                        </tr>-->
+<!--                        {% endfor %}-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--           </div>-->
+<!--        {% endif %}-->
+    {% else %}
+        <h3> No Matching properties found!! </h3>
+    {% endif %}
+{% endif %}
+
+</body>
+</html>
