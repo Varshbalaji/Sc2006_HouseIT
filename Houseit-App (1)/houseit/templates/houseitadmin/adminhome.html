@@ -33,7 +33,7 @@
           <i class="bi bi-person"></i>
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item">{{ user.username }}</a></li>
+            <li><a class="dropdown-item" href="{% url 'viewuser' user.username %}">{{ user.username }} | {{user.user_type}}</a></li></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{% url 'logout' %}" data-toggle="modal" data-target="#logoutModal">Logout</a></li>
           </ul>

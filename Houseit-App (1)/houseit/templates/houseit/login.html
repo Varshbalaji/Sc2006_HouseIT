@@ -19,14 +19,14 @@
 <br> 
 
 
-		 <h1 style="color: white" class="text-md-center"><span class="g"></span><span class="o"></span><span class="o1">HouseitApp</span> <span class="g"></span><span class="l"></span><span class="e"></span></h1>
+<!--		 <h1 style="color: white" class="text-md-center"><span class="g"></span><span class="o"></span><span class="o1">HouseitApp</span> <span class="g"></span><span class="l"></span><span class="e"></span></h1>-->
 
 <div class="row">
 	<aside class="col-sm-4">
 	</aside> <!-- col.// -->
 
 	<aside class="col-sm-4">
-		<h1 style="color: yellow; font-weight: bold; font-size: 40px" class="text-md-center"><span class="g"></span><span class="o"></span><span class="o1"></span>HouseitApp<span class="g"></span><span class="l"></span><span class="e"></span></h1>
+		<h1 style="color: #2eca6a; font-weight: bold; font-size: 40px" class="text-md-center"><span class="g"></span><span class="o"></span><span class="o1"></span>HouseitApp<span class="g"></span><span class="l"></span><span class="e"></span></h1>
 		<br>
 <div class="card">
 <article class="card-body" style="padding-top: 0px">
@@ -35,7 +35,7 @@
   <div class="d-flex justify-content-center h-100">
     <div class="card">
       <div class="card-header">
-        <center><h3 style="color:#FFC312;" >Houseit</h3></center>
+          <center><h3><span style="color:#FFFFFF;">House</span><span style="color:#2eca6a;" >it</span></h3></center>
         <div class="d-flex justify-content-end">
           <span><i class="fab fa-user"></i></span>
         </div>
@@ -44,10 +44,10 @@
         <form method="POST" action="{% url 'login' %}">
           {% csrf_token %}
           <div class="input-group form-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <div class="input-group-prepend" >
+              <span class="input-group-text " ><i class="fas fa-user " ></i></span>
             </div>
-            <input type="text" class="form-control" placeholder="username" name="username" required="">
+            <input type="text" class="form-control" placeholder="username" id="username" name="username" required="">
             
           </div>
             <br>
@@ -55,13 +55,17 @@
             <div class="input-group-prepend">
               <span class="input-group-text"><i class="fas fa-key"></i></span>
             </div>
-            <input type="password" class="form-control" placeholder="password" name="password" required="">
+            <input type="password" class="form-control" placeholder="password" name="password">
           </div>
             <br>
           <div class="form-group">
-            <input type="submit" name="sign-in" value="Sign In" class="btn float-left login_btn">
-            <a href="{% url 'regform' %}"><input name="sign-up" value="Register" class="btn float-right login_btn"></a>
+            <input type="submit" name="sign-in" value="Sign In" class="btn float-left login_btn">&nbsp;
+            <a href="{% url 'regform' %}"><input name="sign-up" value="Register" class="btn float-right login_btn"></a>&nbsp;
+          </div><br>
+          <div class="form-group" id="forgotlink" name="forgotlink">
+              <a href="/forgotpassword" class="btn btn-link" >Forgot Password</a>
           </div>
+
         </form>
       </div>
       <div class="card-footer">
@@ -100,9 +104,29 @@
 
 </div> 
 
-
                             
 
 </body>
+
+
 </html>
 
+  <!-- Vendor JS Files -->
+
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script type="text/javascript" src="{% static 'scripts/accounting.js' %}"></script>
+  <!-- Template Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+
+<script>
+
+$(document).ready(function(){
+  $("#forgotlink a").click(function(){
+    $("#forgotlink a").attr("href", "forgotpassword/"+$("#username").val());
+  });
+});
+</script>

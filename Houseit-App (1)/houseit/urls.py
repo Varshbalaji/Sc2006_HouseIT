@@ -7,16 +7,22 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+
 urlpatterns = [
 
 # Shared URL's
  path('', views.login_form, name='home'),
+ path('home', views.login_form, name='home'),
  path('login/', views.loginView, name='login'),
  path('logout/', views.logoutView, name='logout'),
  path('regform/', views.register_form, name='regform'),
  path('register/', views.registerView, name='register'),
  path('usrhome/', views.userHome,name='userhome'),
  path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('img/favicon.ico'))),
+ path('forgotpassword/', views.forgotpassword, name='forgotpassword'),
+ path('forgotpassword/<username>', views.forgotpassword, name='forgotpassword'),
+ path('resetpassword', views.resetpassword, name='resetpassword'),
+ path('viewuser/<username>', views.viewuser, name='viewuser'),
 
  # Admin URL's
 path('houseitadmin/', views.houseitadmin, name='houseitadmin'),

@@ -489,3 +489,86 @@ def showPropertyDetail(request,pk) :
                   { 'propertydetail': propertydetail
                   })
 
+def forgotpassword(request,username="") :
+    messages.warning(request, 'On Clicking, an one-time password reset  token is sent to your email id and mobile. Use that token to reset your password ')
+
+    return render(request, 'houseit/forgotpassword.html',
+                  { 'username': username
+                  })
+
+def resetpassword(request) :
+
+    username=""
+    otp=""
+    if request.method == 'POST':
+        username = request.POST['username']
+
+    if 'otp' in request.POST:
+        otp = request.POST['otp']
+        newpassword = request.POST['password']
+        if otp != '123456':
+            messages.error(request,'You have entered an invalid One-time password')
+            return render(request, 'houseit/resetpassword.html',
+                          {'username': username
+                           })
+        else:
+            user = User.objects.get(username=username)
+            #print(user,user.password)
+            newpassword=make_password(newpassword)
+            user.password=newpassword
+            user.save()
+            #print(user)
+            messages.success(request, 'Password has been reset for user ' + username)
+            return render(request, 'houseit/login.html')
+
+    print(">>> username = ", username)
+    if User.objects.filter(username=username).exists():
+        user = User.objects.filter(username=username).values()
+        email =  user[0]['email']
+        phone =  user[0]['phone']
+        messages.success(request,'A One-time password reset token has been sent to  ' + email + ' and mobile ' + phone)
+        # print(email,'**',phone)
+    else:
+        messages.error(request,'User Does not Exist!!')
+        return render(request, 'houseit/forgotpassword.html',
+                      {'username': username
+                       })
+
+    return render(request, 'houseit/resetpassword.html',
+                    {'username': username
+                     })
+
+def viewuser(request,username="") :
+    user = User.objects.filter(username=username).values()
+    firstname =user[0]['first_name']
+    lastname = user[0]['last_name']
+    email = user[0]['email']
+    usertype = user[0]['user_type']
+    address =  user[0]['address']
+    phone =  user[0]['phone']
+    if request.method == 'POST':
+        firstname = request.POST['firstname']
+        lastname = request.POST['lastname']
+        email = request.POST['email']
+        usertype = request.POST['usertype']
+        address = request.POST['address']
+        phone = request.POST['phone']
+        user = User.objects.get(username=username)
+        user.first_name=firstname
+        user.last_name=lastname
+        user.email=email
+        user.user_type=usertype
+        user.address=address
+        user.phone=phone
+        user.save()
+        messages.success(request, 'User Profile Updated!!')
+        #print(user)
+    return render(request, 'houseit/userprofile.html',
+                    {'username': username,
+                     'firstname': firstname,
+                     'lastname':lastname,
+                     'email':email,
+                     'usertype':usertype,
+                     'address':address,
+                     'phone':phone
+    })
