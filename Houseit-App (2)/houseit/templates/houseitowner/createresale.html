@@ -1,0 +1,167 @@
+{% extends 'houseitowner/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block body %}
+
+ <!-- ======= Header/Navbar ======= -->
+  <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
+    <div class="container">
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <a class="navbar-brand text-brand" href="{% url 'userhome' %}">House<span class="color-b">it</span></a>
+
+      <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
+        <ul class="navbar-nav">
+
+          <li class="nav-item">
+            <a class="nav-link " href="{% url 'userhome' %}">Home</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link " href="{% url 'research' %}">Research Historical Sales/Rental Data</a>
+          </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'listownerproperties' %}">My Listings</a>
+        </li>
+
+        </ul>
+      </div>
+
+      <ul class="nav nav-pills">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+          <i class="bi bi-person"></i>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'viewuser' user.username %}">{{ user.username }} | {{user.user_type}}</a></li></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'logout' %}" data-toggle="modal" data-target="#logoutModal">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+
+    </div>
+  </nav>
+ <!-- End Header/Navbar -->
+<div class="container">
+
+<br><br><br><br><br><br>
+    <h2 style="color:#007bff;"><b><span class="color-b">Add Property For Resale Listing</span></b></h2><br>
+
+<form class="row g-3" name="createresaleform" id="createresaleform" action="/createresale" method="post" enctype='multipart/form-data'> {% csrf_token %}
+  <div class="col-md-3">
+      <label for="townname" class="form-label" style="color:#007bff;"><b><span class="color-b">Town</span></b></label>
+      <select class="form-select" name="townname" id="townname" required>
+        <option value="">Choose...</option>
+        {% if townlist %}
+            {% for town in townlist %}
+                {% if town.townname ==  property.0.1%}
+                    <option value="{{ town.townname }}" selected>{{ town.townname }}</option>
+                {% else %}
+                    <option value="{{ town.townname }}">{{ town.townname }}</option>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+      </select>
+  </div>
+  <div class="col-md-3">
+      <label for="streetname" class="form-label" style="color:#007bff;"><b><span class="color-b">Street</span></b></label>
+      <select class="form-select" name="streetname" id="streetname" required>
+        <option value="">Choose...</option>
+        {% if streetlist %}
+            {% for street in streetlist %}
+                {% if street.streetname ==  property.0.2%}
+                    <option value="{{ street.streetname }}" selected>{{ street.streetname  }}</option>
+                {% else %}
+                    <option value="{{ street.streetname  }}">{{ street.streetname  }}</option>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+      </select>
+  </div>
+  <div class="col-md-3">
+      <label for="flattype" class="form-label" style="color:#007bff;"><b><span class="color-b">Flat Type</span></b></label>
+    <select class="form-select"  id="flattype" name="flattype" required  >
+        <option value="">Choose...</option>
+        {% if flattypelist %}
+            {% for flatyp in flattypelist %}
+                {% if flatyp.flattype ==  property.0.4 %}
+                    <option value="{{ flatyp.flattype }}" selected>{{ flatyp.flattype }}</option>
+                {% else %}
+                <option value="{{ flatyp.flattype }}">{{ flatyp.flattype }}</option>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </select>
+  </div>
+
+<!--    Next row-->
+
+  <div class="col-md-3">
+      <label for="block" class="form-label" style="color:#007bff;"><b><span class="color-b">Block</span></b></label>
+    <input type="text" class="form-control" id="block" name="block" value="{{ property.0.3 }}" required >
+  </div>
+
+  <div class="col-md-3">
+      <label for="beds" class="form-label" style="color:#007bff;"><b><span class="color-b">Beds</span></b></label>
+    <input type="number" class="form-control" id="beds" name="beds" value="{{ property.0.13 }}" required >
+  </div>
+
+  <div class="col-md-3">
+      <label for="baths" class="form-label" style="color:#007bff;"><b><span class="color-b">Baths</span></b></label>
+    <input type="number" class="form-control" id="baths" name="baths" value="{{ property.0.14 }}" required >
+  </div>
+
+  <div class="col-md-3">
+      <label for="garage" class="form-label" style="color:#007bff;"><b><span class="color-b">Garage</span></b></label>
+    <input type="number" class="form-control" id="garage" name="garage" value="{{ property.0.15 }}" required >
+  </div>
+
+<!--    Next row-->
+
+  <div class="col-md-3">
+      <label for="age" class="form-label" style="color:#007bff;"><b><span class="color-b">Proprety Age</span></b></label>
+      <input type="number" class="form-control"  id="age" name="age"  value="{{ property.0.5 }}" required>
+  </div>
+  <div class="col-md-3">
+      <label for="sqm" class="form-label" style="color:#007bff;"><b><span class="color-b">Floor Area (m<sup>2</sup>)</span></b></label>
+      <input type="number" class="form-control"  id="sqm" name="sqm" value="{{ property.0.12 }}" required >
+  </div>
+
+  <div class="col-md-3">
+      <label for="leaseyears" class="form-label" style="color:#007bff;"><b><span class="color-b">Lease Years Left</span></b></label>
+      <input type="number" class="form-control" id="leaseyears" name="leaseyears" value="{{ property.0.8 }}" required>
+  </div>
+
+  <div class="col-md-3">
+      <label for="askingprice" class="form-label" style="color:#007bff;"><b><span class="color-b">Asking Price</span></b></label>
+      <input type="number" class="form-control" id="askingprice" name="askingprice"  value="{{ property.0.9 }}" required>
+  </div>
+
+<!--    Next row-->
+
+  <div class="col-md-9">
+      <label for="desc" class="form-label" style="color:#007bff;"><b><span class="color-b">Proprety Description</span></b></label>
+      <textarea class="form-control"  id="desc" name="desc" rows="3" required>{{ property.0.16 }}</textarea>
+  </div>
+
+  <div class="col-md-3">
+      <label for="image" class="form-label" style="color:#007bff;" ><b><span class="color-b">Image</span></b></label>
+      <input type="file" class="form-control" id="image" name="image" placeholder="Property Image" accept="image/*" required>
+  </div>
+
+<!--    Empty row-->
+  <div class="col-md-12"></div>
+
+<!--    Next row-->
+  <div class="col-md-12">
+      <button  class="btn btn-secondary"  type="submit"><span class="color-b">Create</span></button>
+  </div>
+
+</form>
+</div>
+{% endblock %}

@@ -1,0 +1,376 @@
+{% extends 'research/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block body %}
+
+
+ <!-- ======= Property Search Section ======= -->
+  <div class="click-closed"></div>
+  <!--/ Form Search Star /-->
+  <div class="box-collapse">
+    <div class="title-box-d">
+      <h3 class="title-d">Search Property</h3>
+    </div>
+    <span class="close-box-collapse right-boxed bi bi-x"></span>
+    <div class="box-collapse-wrap form">
+      <form class="form-a" name="searchcommonform" id="searchcommonform" action="/research">
+        <div class="row">
+          <div class="col-md-6 mb-2">
+            <div class="form-group mt-3">
+              <label class="pb-2" for="townname">Town</label>
+              <select class="form-control form-select form-control-a"  name="townname" id="townname" >
+                <option>Any</option>
+
+                  {% if townlist %}
+                      {% for town in townlist %}
+                          {% if town.townname == uritownname %}
+                              <option value="{{ town.townname }}" selected>{{ town.townname }}</option>
+                          {% else %}
+                              <option value="{{ town.townname }}">{{ town.townname }}</option>
+                          {% endif %}
+                      {% endfor %}
+                  {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6 mb-2">
+            <div class="form-group mt-3">
+              <label class="pb-2" for="streetname">Street</label>
+              <select class="form-control form-select form-control-a" id="streetname" name="streetname">
+                <option>Any</option>
+
+                {% if streetlist %}
+                  {% for street in streetlist %}
+                    {% if street.streetname == uristreetname %}
+                      <option value="{{ street.streetname }}" selected>{{ street.streetname }}</option>
+                    {% else %}
+                      <option value="{{ street.streetname }}">{{ street.streetname }}</option>
+                    {% endif %}
+                {% endfor %}
+               {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6 mb-2">
+            <div class="form-group mt-3">
+              <label class="pb-2" for="flattype">Flat Type</label>
+              <select class="form-control form-select form-control-a"  name="flattype" id="flattype" >
+                  <option>Any</option>
+
+                  {% if flattypelist %}
+                      {% for flatyp in flattypelist %}
+                          {% if flatyp.flattype ==  uriflattype %}
+                              <option value="{{ flatyp.flattype }}" selected>{{ flatyp.flattype }}</option>
+                          {% else %}
+                          <option value="{{ flatyp.flattype }}">{{ flatyp.flattype }}</option>
+                          {% endif %}
+                      {% endfor %}
+                  {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6 mb-2">
+            <div class="form-group mt-3">
+              <label class="pb-2" for="year">Year</label>
+              <select class="form-control form-select form-control-a"  name="year" id="year" >
+                  <option>Any</option>
+
+                  {% if years %}
+                      {% for yyyy in years %}
+                          {% if yyyy ==  uriyear %}
+                              <option value="{{ yyyy }}" selected>{{ yyyy }}</option>
+                          {% else %}
+                          <option value="{{ yyyy }}">{{ yyyy }}</option>
+                          {% endif %}
+                      {% endfor %}
+                  {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6 mb-2">
+            <div class="form-group mt-3">
+              <input type="hidden" name="filter" id="filter" >
+            </div>
+          </div>
+          <div class="col-md-12">
+            <button type="submit" class="btn btn-b">Search Property</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div><!-- End Property Search Section -->>
+
+  <!-- ======= Header/Navbar ======= -->
+  <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
+    <div class="container">
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <a class="navbar-brand text-brand" href="{% url 'userhome' %}">House<span class="color-b">it</span></a>
+
+      <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
+        <ul class="navbar-nav">
+
+          <li class="nav-item">
+            <a class="nav-link " href="{% url 'userhome' %}">Home</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link " href="{% url 'research' %}">Research Historical Sales/Rental Data</a>
+          </li>
+
+        </ul>
+      </div>
+
+      <button type="button" class="btn btn-b-n navbar-toggle-box navbar-toggle-box-collapse" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01">
+        <i class="bi bi-search"></i>
+      </button>
+
+      <ul class="nav nav-pills">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+          <i class="bi bi-person"></i>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'viewuser' user.username %}">{{ user.username }} | {{user.user_type}}</a></li></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'logout' %}" data-toggle="modal" data-target="#logoutModal">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+
+    </div>
+  </nav>
+ <!-- End Header/Navbar -->
+
+  <main id="main">
+
+    <!-- ======= Intro Single ======= -->
+    <section class="intro-single">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 col-lg-8">
+            <div class="title-single-box">
+              <h1 class="title-single">Historical Property Transactions Data</h1>
+                <small>powered by https://data.gov.sg/</small>
+            </div>
+          </div>
+
+
+          <div class="col-md-12 col-lg-4">
+            <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="{% url 'userhome' %}">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Properties Table
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </section><!-- End Intro Single-->
+
+    <!-- ======= Property Grid ======= -->
+    <section class="property-grid grid">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="grid-option">
+              <form class="form-a" name="filterform" id="filterform">
+                <select class="custom-select" name="filterfld" id="filterfld">
+                  {% if urifilter == 'Rent' %}
+                    <option selected>Rent</option>
+                    <option>Sale</option>
+                  {% else %}
+                    <option>Rent</option>
+                    <option selected>Sale</option>
+                  {% endif %}
+                </select>
+              </form>
+            </div>
+          </div>
+
+  {% if properties %}
+<!--      <div class="container-fluid p-2 bg-primary text-white text-center">-->
+<!--          <h1>Matching properties </h1>-->
+<!--      </div>-->
+      <div class="table-reponsive">
+          <table class="table table-striped table-success table-hover table-bordered" id="histTable" name="histTable" width="100%" cellspacing="0">
+              <thead>
+              <tr>
+<!--                  <th>Id</th>-->
+                  <th>Month</th>
+                  <th>Year</th>
+                  <th>Town</th>
+                  <th>Street</th>
+                  <th>Block</th>
+                  <th>Flat Type</th>
+                  {% if urifilter == 'Rent' %}
+                    <th>Monthly Rent</th>
+                  {% else %}
+                    <th>Area(m<sup>2</sup>)</th>
+                    <th>Flat Model</th>
+                    <th>Lease Start</th>
+                    <th>Remaining Lease</th>
+                    <th>Resale Price</th>
+                  {% endif %}
+              </tr>
+              </thead>
+              <tbody>
+              {% for property in properties %}
+              <tr>
+<!--                  <td>{{ property.0 }}</td>-->
+                  <td>{{ property.1 }}</td>
+                  <td>{{ property.2 }}</td>
+                  <td>{{ property.3 }}</td>
+                  <td>{{ property.4 }}</td>
+                  <td>{{ property.5 }}</td>
+                  <td>{{ property.6 }}</td>
+                  {% if urifilter == 'Rent' %}
+                    <td><span class="text-left">$ </span>{{ property.7 | intcomma}}</td>
+                  {% else %}
+                    <td>{{ property.7 }}</td>
+                    <td>{{ property.8 }}</td>
+                    <td>{{ property.9 }}</td>
+                    <td>{{ property.10 }}</td>
+                    <td><span class="text-left">$ </span>{{ property.11 | intcomma}}</td>
+                  {% endif %}
+              </tr>
+              {% endfor %}
+              </tbody>
+          </table>
+      </div>
+{% else %}
+  <h3>
+    <div class="d-inline  p-1  text-danger"> No properties found!!</div>
+  </h3>
+{% endif %}
+        </div>
+      </div>
+    </section><!-- End Property Grid Single-->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <section class="section-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-4">
+          <div class="widget-a">
+            <div class="w-header-a">
+              <h3 class="w-title-a text-brand">Houseit</h3>
+            </div>
+            <div class="w-body-a">
+              <p class="w-text-a color-text-a">
+                50 Nanyang Ave, Singapore 639798
+              </p>
+            </div>
+            <div class="w-footer-a">
+              <ul class="list-unstyled">
+                <li class="color-a">
+                  <span class="color-text-a">Phone .</span> contact@houseit.com
+                </li>
+                <li class="color-a">
+                  <span class="color-text-a">Email .</span> +65 6791 1744
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <nav class="nav-footer">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <a href="{% url 'userhome' %}">Home</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">About</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">Property</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">Contact</a>
+              </li>
+            </ul>
+          </nav>
+          <div class="socials-a">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="bi bi-facebook" aria-hidden="true"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="bi bi-twitter" aria-hidden="true"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="bi bi-instagram" aria-hidden="true"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="bi bi-linkedin" aria-hidden="true"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="copyright-footer">
+            <p class="copyright color-text-a">
+              &copy; Copyright
+              <span class="color-a">Houseit</span> All Rights Reserved.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer><!-- End  Footer -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="{% static 'scripts/accounting.js' %}"></script>
+  <!-- Template Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+  <!-- Datatable JS File -->
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/autofill/2.5.3/js/dataTables.autoFill.min.js"></script>
+
+		<script>
+            $(document).ready(function(){
+				$("#searchcommonform").submit(function(){
+                      document.getElementById("filter").value =$("#filterfld").find(":selected").text(); ;
+				});
+                $('#histTable').DataTable( {
+                    autoFill: true
+                });
+			});
+            $(function () {
+                $("#filterfld").change(function () {
+                    document.getElementById("filter").value =$("#filterfld").find(":selected").text(); ;
+                    $("#searchcommonform").submit();
+                });
+            });
+		</script>
+{% endblock %}
